@@ -1,0 +1,77 @@
+/*
+ * main.c
+ *
+ *  Created on: 28 нояб. 2021 г.
+ *      Author: Home
+ */
+
+/* 1.9. Массивы символов */
+//Вывод всех строк входного файла > 80 символов
+//Задача 1.17. Стр 44.
+
+#include <stdio.h>
+#define MAXLINE 100    /* максимальная длина строки в потоке */
+#define MINLEN	10		//Минимальная длина
+
+int getline_lim(char line[], int maxline);
+void copy(char to[], char from[]);
+
+/* вывод самой длинной строки в потоке */
+int main()
+{
+    char c;
+	int len;                /* длина текущей строки */
+    char line[MAXLINE];     /* текущая введенная строка */
+
+    int cnt = 0;			//Счетчик символов в текущей строке
+    char temp[MINLEN];		//Массив для хранения текущей строки
+
+    int i = 0;
+
+    while ((len = getline_lim(line, MAXLINE)) > 0){
+    	printf("Total length = %d\n", len);
+    	while (line[i] != '\0'){
+
+    		while (line[i] != '\n'){
+    			temp[cnt] = line[i];
+    			++cnt;
+    			++i;
+    		}
+    		temp[cnt] = '\0';
+    		if (cnt >= MINLEN)
+    			printf("Len = %d\t%s\n", cnt, temp);
+
+    		cnt = 0;
+    		++i;
+    	}
+    }
+
+    c=getchar();
+    return 0;
+}
+
+/* getline: считывает строку в s, возвращает её длину */
+int getline_lim(char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF ; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+
+/* copy: копирует строку from в to;
+ * длина to считается достаточной */
+void copy(char to[], char from[])
+{
+    int i;
+
+    i = 0;
+    while ((to[i] = from[i]) != '\0')
+        ++i;
+}
