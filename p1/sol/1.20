@@ -1,0 +1,93 @@
+/*
+ * main.c
+ *
+ *  Created on: 23 нояб. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 1.10. Внешние переменные */
+
+#include <stdio.h>
+#define MAXLINE 1000    /* максимальная длина строки в потоке */
+
+int max;                /* текущая максимальная длина */
+
+char line[MAXLINE];     /* текущая введенная строка */
+char longest[MAXLINE];  /* самая длинная строка из введенных */
+
+int getline_lim(void);
+void copy(void);
+void detab (int l);
+
+/* вывод самой длинной строки в потоке
+ * специальная версия */
+int main()
+{
+    int len;
+    extern int max;
+    extern char longest[];
+
+    max = 0;
+    while ((len = getline_lim()) > 0){
+    	detab(len);
+    	if (len > max) {
+            max = len;
+            copy();
+        }
+    }
+    if (max > 0)    /* была непустая строка */
+        printf("%s", longest);
+    return 0;
+}
+
+void detab (int l){
+	extern char line[];
+	int i = 0;
+	int n = 3;	//Количество строк на которое происходит сдвиг
+
+	printf("Line before:\t%s\n", line);
+
+	while (line[i] != '\0') {
+		if (line[i] == 'a'){
+			for (int j = l; j > i; --j){
+				line[j + (n - 1)] = line[j];
+			}
+			l += n;
+			for (int j = i; j < (i + n); ++j){
+				line [j] = 'F';
+			}
+			i += (n - 1);
+		}
+		++i;
+	}
+	printf("Line after:\t%s\n", line);
+	printf("\n");
+}
+
+/* getline: считывает строку, возвращает её длину
+ * специальная версия */
+int getline_lim(void)
+{
+    int c, i;
+    extern char line[];
+
+    for (i = 0; i<MAXLINE-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        line[i] = c;
+    if (c == '\n') {
+        line[i] = c;
+        ++i;
+    }
+    line[i] = '\0';
+    return i;
+}
+
+/* copy: копирует строку
+ * специальная версия */
+void copy(void)
+{
+    int i;
+    extern char line[], longest[];
+
+    i = 0;
+    while ((longest[i] = line[i]) != '\0')
+        ++i;
+}
