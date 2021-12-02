@@ -1,0 +1,103 @@
+/* 2.7. Преобразование типов */
+
+#include <stdio.h>
+#include <math.h>
+
+#define MAXLINE 1000    /* максимальная длина строки в потоке */
+
+int getline_lim(char line[], int maxline);
+void copy(char to[], char from[]);
+
+int htoi( char line[]);
+
+/* вывод самой длинной строки в потоке */
+int main()
+{
+    int len;                /* длина текущей строки */
+    int max;                /* текущая максимальная длина */
+    char line[MAXLINE];     /* текущая введенная строка */
+    char longest[MAXLINE];  /* самая длинная строка из введенных */
+
+    max = 0;
+    while ((len = getline_lim(line, MAXLINE)) > 0){
+        htoi(line);
+    	if (len > max) {
+            max = len;
+            copy(longest, line);
+        }
+    }
+    if (max > 0)    /* была непустая строка */
+        printf("%s", longest);
+    return 0;
+}
+
+int htoi( char line[]){
+	printf("Line before = %s\n", line);
+
+	char sim[MAXLINE];
+	int isNumber = 0;
+
+	int i = 0;
+	int j = 0;
+	int cnt = 0;
+	int num = 0;
+
+	while (line[i] != '\0' ){
+		if ((line[i] == '0') && (line[i+1] == 'x') && (line[i+2] >= '0' &&  line[i+2] <= '9')){
+			isNumber = 1;
+			cnt = 1;
+		}
+
+		if (isNumber) {
+			if ((cnt > 3) && (!( (line [i] >= '0') && (line [i] <= '9')  ) ) && (!( (line [i] >= 'A') && (line [i] <= 'F')  ) ) ){
+				isNumber = 0;
+				cnt = 0;
+			} else {
+				sim[j++] = line [i];
+				++cnt;
+			}
+		}
+		i++;
+	}
+	sim [j] = '\0';
+
+	printf("Number of symbol: %d\n", j);
+	printf("Number in 16ss is: %s\n", sim);
+
+	for (int i = 2; i < j; i++) {
+		if ( sim[i] >= '0' && sim[i] <= '9')
+			num += (sim[i] - '0') * pow(16, j-(i+1));
+		 else
+			num += ((sim[i] - 'A') + 10) * pow(16, j-(i+1));
+	}
+
+	printf("Number of symbol: %d\n", num);
+
+	return 0;
+}
+
+/* getline: считывает строку в s, возвращает её длину */
+int getline_lim(char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+
+/* copy: копирует строку from в to;
+ * длина to считается достаточной */
+void copy(char to[], char from[])
+{
+    int i;
+
+    i = 0;
+    while ((to[i] = from[i]) != '\0')
+        ++i;
+}
