@@ -1,0 +1,29 @@
+/*
+ * main.c
+ *
+ *  Created on: 2 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 2.7. Поразрядные операции */
+//Напишите функцию invert (x,p,n), возвращающую свой аргумент x, в котором
+//обращены n бит, начиная с позиции p, а остальные не тронуты
+
+#include <stdio.h>
+
+
+int invert(int x, int p, int n);
+
+int main()
+{
+	int n = 0xFF;
+	char c;
+
+	printf("%X\n", invert (n, 4, 3));
+	c = getchar();
+    return 0;
+}
+
+int invert(int x, int p, int n){
+	return (x ^= (~(~0 << n))<< p);
+}
