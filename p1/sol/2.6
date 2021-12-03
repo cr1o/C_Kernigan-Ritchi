@@ -1,0 +1,42 @@
+/*
+ * main.c
+ *
+ *  Created on: 3 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 2.8. Операции инкрементирования и декрементирования */
+//Упражнение 2.6
+
+#include <stdio.h>
+#include <math.h>
+
+int setbit(int x, int p, int n, int y);
+
+int main()
+{
+	char c;
+
+	int s = 0xFCF;
+    int n = 3;
+    int p = 4;
+    int y = 0xAFFFFFFF;
+
+	s = setbit(s, p, n, y);
+
+	printf("%X", s);
+	c = getchar();
+    return 0;
+}
+
+int setbit(int x, int p, int n, int y){
+	int mask1;
+
+	mask1 = ((y >> (32-n)) & (~(~0 << n))) << p ;
+
+	x &= ~((~(~0 << n)) << p);  //Сброс битов которое нужно подставить
+
+	x |= mask1;
+
+
+	return x;
+}
