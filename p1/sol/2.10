@@ -1,0 +1,39 @@
+/*
+ * main.c
+ *
+ *  Created on: 3 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 2.10. Операции с присваиванием и выражения с ними */
+//Упражнение 2.9
+
+#include <stdio.h>
+#include <math.h>
+
+int lower (int c);
+
+int main()
+{
+	char c;
+
+	while ( (c = getchar()) != EOF ){
+		printf("%c\n", lower(c));
+	}
+
+	c = getchar();
+    return 0;
+}
+
+int lower (int c){
+	return (c >= 'A' && c <= 'Z') ? (c + 'a' - 'A') : c;
+}
+
+/* Original
+int lower (int c){
+	if (c >= 'A' && c <= 'Z')
+		return c + 'a' - 'A';
+	else
+		return c;
+	return c;
+}
+*/
