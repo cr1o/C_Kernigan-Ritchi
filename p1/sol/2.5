@@ -1,0 +1,51 @@
+/*
+ * main.c
+ *
+ *  Created on: 3 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 2.8. Операции инкрементирования и декрементирования */
+
+#include <stdio.h>
+#include <math.h>
+
+#define MAXLINE 1000
+
+void squeeze (char s[], char d[]);
+
+int any (char s1[], char s2[]);
+
+int main()
+{
+	int lim = MAXLINE;
+	char s[MAXLINE];
+	char g[MAXLINE];
+	int i;
+	char c;
+	printf("Imput a string:\n");
+	for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+	        s[i] = c;
+	s[i] = '\0';
+	//printf("%s\n", s);
+
+	printf("Enter the character you want to find:\n");
+	for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+			g[i] = c;
+	g[i] = '\0';
+
+	printf("%d\n", (any (s,g)) );
+
+	c = getchar();
+    return 0;
+}
+
+int any (char s1[], char s2[]){
+
+	for (int k = 0; s1[k] != '\0'; k++){
+		for (int i  = 0; s2[i] != '\0'; i++)
+			if (s1[k] == s2[i] )
+				return (k + 1 );
+	}
+
+	return -1;
+}
