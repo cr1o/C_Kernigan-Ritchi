@@ -1,0 +1,54 @@
+/*
+ * main.c
+ *
+ *  Created on: 3 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 2.8. Операции инкрементирования и декрементирования */
+
+#include <stdio.h>
+#include <math.h>
+
+#define MAXLINE 1000
+
+void squeeze (char s[], char d[]);
+
+int main()
+{
+	int lim = MAXLINE;
+	char s[MAXLINE];
+	char g[MAXLINE];
+	int i;
+	char c;
+	printf("Imput a string:\n");
+	for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+	        s[i] = c;
+	s[i] = '\0';
+	//printf("%s\n", s);
+
+	printf("Input symbol that will be deleted:\n");
+	for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+			g[i] = c;
+	g[i] = '\0';
+
+	squeeze(s,g);
+	printf("%s\n", s);
+
+
+
+
+	c = getchar();
+    return 0;
+}
+
+void squeeze (char s[], char d[]){
+
+	int i, j;
+	for (int k = 0; d[k] != '\0'; k++){
+		for (i = j = 0; s[i] != '\0'; i++)
+			if (s[i] != d[k] )
+				s[j++] = s[i];
+		s[j] = '\0';
+	}
+
+}
