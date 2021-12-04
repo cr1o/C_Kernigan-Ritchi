@@ -1,0 +1,78 @@
+/*
+ * main.c
+ *
+ *  Created on: 4 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 3.5. Циклы while и for */
+
+//Напишите функцию expand(s1, s2), заменяющую сокращенную запись наподобие a-z в
+//строке s1 эквивалентной полной записью abc. . . xyz в s2. В s1 допускаются буквы (прописные и строчные) и
+//цифры. Следует уметь справляться с такими случаями, как a-b-c, a-z0-9 и -а-b. Считайте знак - в начале или в
+//конце s1 обычным символом минус
+
+#include <stdio.h>
+
+#define MAXLINE 100    /* максимальная длина строки в потоке */
+
+int getline_lim(char s[], int lim);
+void expand (char s1[], char s2[]);
+
+int main()
+{
+	char c;
+	int len;
+	char line[MAXLINE];
+	char line2[MAXLINE];
+
+	while ((len = getline_lim(line, MAXLINE)) > 0){
+		printf("Total length = %d\n", len);
+		printf("String: \n%s\n", line);
+		expand(line, line2);
+		printf("String: \n%s\n", line2);
+	}
+
+	c = getchar();
+    return 0;
+}
+
+//Expand s1 -> s2
+//Work only with a-z
+void expand (char s1[], char s2[]){
+	int i,j;
+	i = 0;
+	j = 0;
+	while (s1[i] != '\0') {
+		printf("i = %d\tj = %d\n", i, j);
+		if ((s1[i + 1] == '-') && ( (s1[i] >= 'a' && s1[i] <= 'z') && (s1[i + 2] >= 'a' && s1[i + 2] <= 'z'))) {
+			s2[j++] = s1[i];
+			while ((s2[j-1] != (s1[i+2] - 1) )){
+				s2[j] = s2[j -1] + 1;
+				printf("s2[%d] = %c\n", j, s2[j]);
+				j++;
+			}
+			i += 1;
+		} else
+			s2[j++] = s1[i];
+
+		i++;
+	}
+	s2[j] = '\0';
+
+}
+
+// getline: считывает строку в s, возвращает её длину
+int getline_lim(char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF && c != '\n'; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
