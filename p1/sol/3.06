@@ -1,0 +1,75 @@
+/*
+ * main.c
+ *
+ *  Created on: 5 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 3.6. Цикл do-while */
+
+//Упражнение 3.6. Напишите версию itoa с дополнительным третьим аргументом, задающим минимальную
+//ширину поля. При необходимости преобразованное число должно слева дополняться пробелами.
+
+
+#include <stdio.h>
+
+#define MAXLINE 100    /* максимальная длина строки в потоке */
+
+void itoa (int n, char s[], int minlen);
+//void itob (int n, char s[], int b);
+
+void reverse(char arr[]);
+
+int main()
+{
+	char c;
+	int len = 321;
+	char line[MAXLINE];
+
+	itoa(len, line, 6);
+	printf("String: \n%s\n", line);
+  
+	c = getchar();
+  return 0;
+}
+
+void itoa (int n, char s[], int minlen)
+{
+	int i, j, sign;
+	if ((sign = n) < 0) 		// сохраняем знак
+		n = -n; 				// делаем n положительным
+	i = 0;
+	do { 						// генерируем цифры в обратном порядке
+		s[i++] = n % 10 + '0'; 	// следующая цифра
+	} while ((n /= 10) > 0); 	// исключить ее
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+	reverse(s);
+
+	while (i < minlen){
+		for ( j = i; j >= 0; j--){
+			s[j+1] = s[j];
+		}
+		s[0] = ' ';
+		i++;
+	}
+}
+
+void reverse(char arr[]){
+	char t;
+	int cnt = 0;	//Количество символов не считая '/0'
+	int i = 0;
+
+	while (arr[i] != '\0'){
+		++cnt;
+		++i;
+	}
+
+	for (int i = 0; i < cnt /2; i++){
+		t = arr[i];
+		arr[i] = arr[cnt - 1 - i];
+		arr[cnt - 1 - i] = t;
+	}
+
+}
