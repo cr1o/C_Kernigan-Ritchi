@@ -1,0 +1,95 @@
+/*
+ * main.c
+ *
+ *  Created on: 5 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 4.2. Функции, возвращающие нецелые значения */
+
+//Упражнение 4.2. Дополните функцию atof таким образом, чтобы она справлялась с числами вида
+//123.456e-6
+//в которых после мантиссы может стоять е (или Е) с последующим порядком (быть может, со знаком).
+
+#include <ctype.h>
+#include <stdio.h>
+
+#define MAXLINE 1000    // максимальная длина строки в потоке
+
+double atof (char s[]);
+int getline2 (char s[], int lim);
+
+// Simple calculator
+int main()
+{
+	char c;
+	double sum, atof (char[]);
+	char line[MAXLINE];
+	//int getline (char line[], int max);
+	sum = 0;
+	while (getline2(line, MAXLINE) > 0){
+		printf ("Result = %g\n ", atof(line));
+		printf ("SUM = \t%g\n", sum += atof(line));
+	}
+	c = getchar();
+	return 0;
+}
+
+/* atof: преобразование строки s в double */
+double atof (char s[])
+{
+	double val, power;
+	double tmp;
+	int i, sign;
+	int sign2;
+	int st;	//степень
+	for (i = 0; isspace (s[i]); i++)
+		; /* игнорирование левых символов-разделителей */
+	sign = (s[i] == '-') ? -1 : 1;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	for (val = 0.0; isdigit (s[i]); i++)
+		val = 10.0 * val + (s[i] - '0');
+	if (s[i] =='.')
+		i++;
+	for (power = 1.0; isdigit(s[i]); i++) {
+		val = 10.0 * val + (s[i] - '0');
+		power *= 10.0;
+	}
+
+	if ((s[i] =='e') || (s[i] =='E')) {
+		i++;
+		sign2 = (s[i] == '-') ? -1 : 1;
+		if (s[i] == '+' || s[i] == '-')
+				i++;
+		for (st = 0.0; isdigit (s[i]); i++)
+			st = 10.0 * st + (s[i] - '0');
+		
+		tmp = sign * val / power;
+		if (sign2 > 0){
+			while (st > 0){
+				tmp *= 10;
+				st--;
+			}
+		} else {
+			while (st > 0){
+				tmp /= 10;
+				st--;
+			}
+		}
+
+		return tmp;
+	} else
+		return sign * val / power;
+}
+
+int getline2 (char s[], int lim){
+	int c, i;
+	i = 0;
+	while ( --lim > 0 &&  (c = getchar()) != EOF && c != '\n' )
+		s[i++] = c;
+	if (c == '\n')
+		s[i++] = c;
+	s[i] = '\0';
+	return i;
+}
