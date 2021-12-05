@@ -52,7 +52,7 @@ void expand (char s1[], char s2[]){
 				printf("s2[%d] = %c\n", j, s2[j]);
 				j++;
 			}
-			i += 1;
+			i++;
 		} else
 			s2[j++] = s1[i];
 
