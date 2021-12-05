@@ -1,0 +1,97 @@
+/*
+ * main.c
+ *
+ *  Created on: 5 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 3.6. Цикл do-while */
+
+//Упражнение 3.5. Напишите функцию itob(n, s, b), которая переводит целое n в строку s,
+//представляющую число по основанию b. В частности, itob(n, s, 16) помещает в s текст числа n в
+//шестнадцатеричном виде.
+
+
+
+
+#include <stdio.h>
+
+#define MAXLINE 100    /* максимальная длина строки в потоке */
+
+//void itoa (int n, char s[]);
+void itob (int n, char s[], int b);
+
+void reverse(char arr[]);
+
+int main()
+{
+	char c;
+	int len = 6847;
+	char line[MAXLINE];
+	//char line2[MAXLINE];
+
+	itob(len, line, 2);
+	printf("String: \n%s\n", line);
+	//while ((len = getline_lim(line, MAXLINE)) > 0){
+	//	printf("Total length = %d\n", len);
+	//	printf("String: \n%s\n", line);
+
+		//printf("String: \n%s\n", line2);
+	//}
+
+	c = getchar();
+    return 0;
+}
+
+/* itoa: преобразование n в строку s */
+void itob (int n, char s[], int b){
+	int i, sign;
+	if ((sign = n) < 0) 		// сохраняем знак
+		n = -n; 				// делаем n положительным
+	i = 0;
+	do { 						// генерируем цифры в обратном порядке
+		if ((n % b) > 9 ) {
+			s[i++] = n % b - 10 + 'A';
+		} else
+			s[i++] = n % b + '0'; 	// следующая цифра
+	} while ((n /= b) > 0); 	// исключить ее
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+	reverse(s);
+
+}
+
+/*Original
+void itoa (int n, char s[])
+{
+	int i, sign;
+	if ((sign = n) < 0) 		// сохраняем знак
+		n = -n; 				// делаем n положительным
+	i = 0;
+	do { 						// генерируем цифры в обратном порядке
+		s[i++] = n % 10 + '0'; 	// следующая цифра
+	} while ((n /= 10) > 0); 	// исключить ее
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+	reverse(s);
+}
+*/
+void reverse(char arr[]){
+	char t;
+	int cnt = 0;	//Количество символов не считая '/0'
+	int i = 0;
+
+	while (arr[i] != '\0'){
+		++cnt;
+		++i;
+	}
+
+	for (int i = 0; i < cnt /2; i++){
+		t = arr[i];
+		arr[i] = arr[cnt - 1 - i];
+		arr[cnt - 1 - i] = t;
+	}
+
+}
