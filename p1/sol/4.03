@@ -8,6 +8,7 @@
 //Упражнение 2.9
 
 
+
 //main
 #include <stdio.h>
 #include <stdlib.h> 	// для atof()
@@ -42,6 +43,8 @@ int main ()
 	char s[MAXOP];
 
 	while ((type = getop (s)) != EOF) {
+		//printf("String =  %s\n", s);
+		//printf("Type =  %d\n", type);
 		switch (type) {
 		case NUMBER:
 			push (atof (s));
@@ -88,12 +91,17 @@ int getop(char s[])
 	while ((s[0] = c = getch()) == ' ' || c == '\t' )
 		;
 	s[1] = '\0';
-	if (!isdigit(c) && c != '.' && c != '-')
+	if (!isdigit(c) && c != '.' &&  c != '-'   )
 		return c; /* не число */
+
 	i = 0;
-	if ( c == '-')
+	if ( c == '-'){
+		//s[++i] = c;
+		//printf("c =  %c\n", c);
+		c = getch();
+		//printf("c =  %c\n", c);
 		s[++i] = c;
-	c = getch();
+	}
 	if (isdigit(c)) /* накапливаем целую часть */
 		while (isdigit(s[++i] = c = getch()))
 			;
