@@ -1,0 +1,188 @@
+/*
+ * main.c
+ *
+ *  Created on: 7 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 2.10. Операции с присваиванием и выражения с ними */
+//Упражнение 2.9
+
+//main
+#include <stdio.h>
+#include <stdlib.h> 	// для atof()
+
+#define MAXOP 100 		// макс. размер операнда или оператора
+#define NUMBER '0' 		// признак числа
+int getop (char []);
+void push (double);
+double pop (void);
+double popm (void);
+void clstack (void);
+
+//pop - push
+#define MAXVAL 100 		// максимальная глубина стека
+int sp = 0; 			// следующая свободная позиция в стеке */
+double val[ MAXVAL ]; 	// стек
+
+//getop
+#include <ctype.h>
+int getch(void);
+void ungetch(int);
+
+//getch и ungetch
+#define BUFSIZE 100
+//char buf[BUFSIZE]; 		// буфер для ungetch
+//int bufp = 0; 			// след, свободная позиция в буфере
+int buf;
+int full_b;
+
+// калькулятор с обратной польской записью
+int main ()
+{
+	int type;
+	//double t1,t2,t3;
+	double op2, op1;
+	char s[MAXOP];
+
+
+	while ((type = getop (s)) != EOF) {
+		//printf("String =  %s\n", s);
+		//printf("Type =  %d\n", type);
+		switch (type) {
+		case NUMBER:
+			push (atof (s));
+			break;
+		case '+':
+			push (pop() + pop());
+			break;
+		case '*':
+			push (pop() * pop());
+			break;
+		case '-':
+			op2 = pop();
+			push (pop() - op2);
+			break;
+		case '%':
+			op2 = pop();
+			op1 = pop();
+			while (op1 > op2)
+				op1 -= op2;
+			push (op1);
+			break;
+		case '/' :
+			op2 = pop();
+			if (op2 != 0.0)
+				push (pop() / op2);
+			else
+				printf("Error: division by zero\n");
+			break;
+		case '\n' :
+			printf("\t%.8g\n", pop());
+			break;
+		default:
+			printf("Error: Unknown operation %s\n", s);
+		break;
+		}
+	}
+	return 0;
+}
+
+/* getop: получает следующий оператор или операнд */
+int getop(char s[])
+{
+	int i, c;
+	int tm;
+	int isNumber;
+
+	while ((s[0] = c = getch()) == ' ' || c == '\t' )
+		;
+
+	isNumber = 0;
+	if (c == '-'){
+		tm = getch();
+		if (tm == '.' || isdigit(tm) )
+			isNumber = 1;
+		ungetch(tm);
+	}
+
+
+	s[1] = '\0';
+	if (!isdigit(c) && c != '.' &&  !isNumber   )
+		return c; /* не число */
+
+	i = 0;
+	if ( c == '-'){
+		//s[++i] = c;
+		//printf("c =  %c\n", c);
+		c = getch();
+		//printf("c =  %c\n", c);
+		s[++i] = c;
+	}
+	if (isdigit(c)) /* накапливаем целую часть */
+		while (isdigit(s[++i] = c = getch()))
+			;
+	if (c == '.') /* накапливаем дробную часть */
+		while (isdigit(s[++i] = c = getch()))
+			;
+	s[i] = '\0';
+	if (c != EOF)
+		ungetch(c);
+	return NUMBER;
+}
+///*
+int getch(void) // взять (возможно возвращенный) символ
+{
+	//return (bufp > 0) ? buf[--bufp] : getchar();
+	if (full_b) {
+		full_b = 0;
+		return buf;
+	} else
+		return getchar();
+
+	//return (full_b > 0) ? buf : getchar();
+}
+
+void ungetch(int c) // вернуть символ на ввод
+{
+	if (full_b)
+		printf ("ungetch: too many characters\n");
+	else {
+		buf = c;
+		full_b  = 1;
+	}
+}
+//*/
+
+/* push: положить значение f в стек */
+void push(double f)
+{
+	if (sp < MAXVAL)
+		val[sp++] = f;
+	else
+		printf( "Error: Stack full, %g does not fit\n", f);
+}
+/* pop: взять с вершины стека и выдать в качестве результата */
+double pop(void)
+{
+	if (sp > 0)
+		return val[--sp];
+	else {
+		printf( "Error: stack is empty\n");
+		return 0.0;
+	}
+}
+//Clear stack
+void clstack (void){
+	sp = 0;
+}
+
+//Modified pop.
+double popm(void)
+{
+	if (sp > 0)
+		return val[sp - 1];
+	else {
+		printf( "Error: stack is empty\n");
+		return 0.0;
+	}
+}
