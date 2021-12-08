@@ -1,0 +1,97 @@
+/*
+ * main.c
+ *
+ *  Created on: 8 дек. 2021 г.
+ *      Author: L K
+ */
+
+
+#include <stdio.h>
+#define dprint(expr) printf(#expr " = %g\n", expr);
+#define iprint(in) printf(#in " = %d\n", in);
+#define swap(t,x,y) {t tmp; tmp = x; x = y; y = tmp;}
+
+void printd(int n);
+
+int main (){
+
+	//int a, b;
+	int a, b;
+	a = 555;
+	b = 789;
+
+	printd(a);
+	printf("\n");
+	printd(b);
+
+}
+
+//printd: Вывод числа n десятичными цифрами
+//переделать itoa задача 3.6
+
+void printd(int n){
+	if (n < 0){
+		putchar('-');
+		n = -n;
+	}
+	if (n / 10)
+		printd(n / 10);
+	putchar(n % 10 + '0');
+}
+
+/*
+
+int main()
+{
+	char c;
+	int len = 321;
+	char line[MAXLINE];
+
+	itoa(len, line, 6);
+	printf("String: \n%s\n", line);
+  
+	c = getchar();
+  return 0;
+}
+
+void itoa (int n, char s[], int minlen)
+{
+	int i, j, sign;
+	if ((sign = n) < 0) 		// сохраняем знак
+		n = -n; 				// делаем n положительным
+	i = 0;
+	do { 						// генерируем цифры в обратном порядке
+		s[i++] = n % 10 + '0'; 	// следующая цифра
+	} while ((n /= 10) > 0); 	// исключить ее
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+	reverse(s);
+
+	while (i < minlen){
+		for ( j = i; j >= 0; j--){
+			s[j+1] = s[j];
+		}
+		s[0] = ' ';
+		i++;
+	}
+}
+
+void reverse(char arr[]){
+	char t;
+	int cnt = 0;	//Количество символов не считая '/0'
+	int i = 0;
+
+	while (arr[i] != '\0'){
+		++cnt;
+		++i;
+	}
+
+	for (int i = 0; i < cnt /2; i++){
+		t = arr[i];
+		arr[i] = arr[cnt - 1 - i];
+		arr[cnt - 1 - i] = t;
+	}
+
+}
+*/
