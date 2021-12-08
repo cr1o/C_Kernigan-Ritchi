@@ -1,0 +1,22 @@
+/*
+ * main.c
+ *
+ *  Created on: 8 дек. 2021 г.
+ *      Author: L K
+ */
+
+#include <stdio.h>
+#define dprint(expr) printf(#expr " = %g\n", expr);
+#define iprint(in) printf(#in " = %d\n", in);
+#define swap(t,x,y) {t tmp; tmp = x; x = y; y = tmp;}
+
+int main (){
+
+	int a, b;
+	a = 2;
+	b = 3;
+	swap(int, a, b);
+
+	iprint(a);
+	iprint(b);
+}
