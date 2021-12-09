@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+void strcat2(char *s1, char *s2);
+
+int main() {
+	char *msg1 = "First";
+	char *msg2 = "Second";
+
+	printf("%s\n", msg1);
+	strcat2(msg1, msg2);
+
+	printf("\n\nResult = %s", msg1);
+	getchar();
+}
+
+void strcat2(char *s1, char *s2){
+	int i, j;
+	i = j = 0;
+	while ( *(s1 + i) != '\0' )
+		i++;
+	printf("i = %d\n", i);
+
+	i--;
+
+	for (; *s2  != '\0'; s2++, i++){
+		//*(s1 + i) = s2[0]; //При добавлении этой строки программа виснет
+		printf(s2);
+		printf("\ti= %d\n", i);
+	}
+
+	//printf(s2);
+	//while (   != '\0' ){
+	//	s1[j] = s2[j];
+	//	j++;
+	//	printf("i = %d\n", i);
+	//	printf("j = %d\n", j);
+	//}
+
+	printf("s1[0] = %c\n", *(s1));
+	//printf("s1[1] = %c\n", *(s1+1));
+	//printf("s1[2] = %c\n", *(s1+2));
+
+	//if (*(s1 + 5) == '\0')
+	//	printf("YES\n");
+
+}
+
+//???Почему Программа зависает
+/*
+while (  ( *(s1 + i) = *(s2 + j)) != '\0' ){
+		i++;
+		j++;
+		printf("i = %d\n", i);
+		printf("j = %d\n", j);
+	}
+*/
