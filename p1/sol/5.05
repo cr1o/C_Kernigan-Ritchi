@@ -1,0 +1,66 @@
+//5.5. Символьные указатели функции
+//Упражнение 5.3. Используя указатели, напишите функцию strcat, которую мы рассматривали в главе 2
+//(функция strcat(s, t) копирует строку t в конец строки s).
+
+#include <stdio.h>
+#define MAX_LINE 1000
+
+void strncat2(char *s1, char *s2, int n);
+void strncpy2(char *s, char *t, int n);
+int strncmp2(char *s, char *t, int n);
+
+
+int main() {
+	//char *msg1 = "First";
+	//char *msg2 = "Second";
+	char str1[MAX_LINE] = "AD";
+	char str2[MAX_LINE] = "ACdef";
+	int cnt =  2;
+	printf("%s\n", str1);
+	printf("%s\n", str2);
+
+	//strncat2( str1, str2, cnt);
+	//strncpy2( str1, str2, cnt);
+	printf("\n\nResult = %d", strncmp2(str1, str2, cnt) );
+	getchar();
+}
+
+int strncmp2(char *s, char *t, int n){
+
+	while ( (n-- > 0) && (*s != '\0') ){
+		if (*s > *t)
+			return 1;
+		else if (*s < *t)
+			return -1;
+		s++;
+		t++;
+	}
+	return 0;
+}
+
+
+void strncpy2(char *s, char *t, int n){
+
+	while ( (*t != 0) && (n-- > 0 )) {
+		*s = *t;
+		s++;
+		t++;
+	}
+
+}
+
+
+void strncat2(char *s1, char *s2, int n){
+	while ( *s1++ != '\0' )
+		;
+	s1 --;
+
+	while ( *s2 != '\0' &&  n-- > 0)  {
+		*s1 = *s2;
+		s1++;
+		s2++;
+	}
+
+	if (*s1 != '\0')
+		*s1 = '\0';
+}
