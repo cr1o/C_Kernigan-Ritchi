@@ -4,13 +4,15 @@
 
 #include <stdio.h>
 
+#define MAX_LINE 1000
+
 void strcat2(char *s1, char *s2);
 
 int main() {
 	//char *msg1 = "First";
 	//char *msg2 = "Second";
-	char str1[] = "OxO";
-	char str2[] = "YxY";
+	char str1[MAX_LINE] = "OxO";
+	char str2[MAX_LINE] = "YxY";
 
 	strcat2(str1, str2);
 	printf("\n\nResult = %s", str1);
@@ -18,12 +20,10 @@ int main() {
 }
 
 void strcat2(char *s1, char *s2){
-	int  n;
-	n = 0;
 	while ( *s1++ != '\0' )
-		n++;
+		;
 	s1--;
-
+	
 	while ((*s1++ = *s2++) != '\0')
 		;
 	//while (*s1++ = *s2++)		//Ругается компилятор, но работает
