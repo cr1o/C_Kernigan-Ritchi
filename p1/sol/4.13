@@ -1,0 +1,56 @@
+//4.10. Рекурсия
+//Упражнение 4.13. Напишите рекурсивную версию функции reverse(s), переставляющую элементы строки
+//в ту же строку в обратном порядке.
+#include <stdio.h>
+
+#include <stdio.h>
+
+
+void rec_reverse(char *s);
+void swap (char v[], int i, int j);
+
+int main (){
+    char arr[] = "Privet";
+
+    char arr2[] = "ABC";
+
+    printf(arr);
+    printf("\n");
+    rec_reverse(arr);
+    printf(arr);
+
+    printf("\n\n");
+    printf(arr2);
+    printf("\n");
+    rec_reverse(arr2);
+    printf(arr2);
+
+    getchar();    
+    return 0;
+}
+
+void rec_reverse(char *s){
+    static int cnt = 0;
+    int i = 0;
+    while ( s[i] != '\0')
+        i++; 
+
+    swap(s, cnt, i - 1 - cnt);
+  
+    cnt++;
+
+    while (cnt < (i / 2)){
+        rec_reverse(s);
+        return;  
+    }
+        
+    cnt = 0; 
+}
+
+/* меняет местами i и j элемент массива */
+void swap (char v[], int i, int j) {
+    char tm = v[i];
+    v[i] = v[j];
+    v[j] = tm;
+}
+
