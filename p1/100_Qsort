@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+void qsort2(int v[], int left, int right);
+//void swap2(int v[], int i, int j);
+
+int main (){
+    int arr[10] = { 13, 11, 15, 1, 10, 6, 7, 9, 8, 44};
+        
+    for (int i = 0; i < 10; i++){
+        printf ("%d\t", arr[i]);
+    }
+    
+    qsort2(arr, 0, 9);
+    printf("\n\n");
+    for (int i = 0; i < 10; i++){
+        printf ("%d\t", arr[i]);
+    }    
+
+    char c = getchar();
+    printf ("c = %c\n",c);
+    return 0;
+}
+
+/* qsort: сортирует v[left]...v[right] по возрастанию */
+void qsort2(int v[], int left, int right)
+{
+    int i, last;
+    void swap2(int v[], int i, int j);
+    if (left >= right)                  // ничего не делается, если 
+        return;                         // в массиве менее двух элементов 
+    swap2(v, left, (left + right)/2);   // делящий элемент 
+    last = left;                       // переносится в v[0] 
+    for(i = left+1; i <= right; i++)   // деление на части
+        if (v[i] < v[left])
+            swap2(v, ++last, i);
+   
+
+    swap2(v, left, last);               // перезапоминаем делящий элемент 
+
+    printf ("\n\n");
+    printf ("Left = %d\n", left);
+    printf ("Last = %d\n", last);
+    printf ("Right = %d\n", right);
+    for (int i = 0; i < 10; i++)
+        printf ("%d\t", v[i]);
+
+    qsort2(v, left, last-1);
+    qsort2(v, last+1, right);
+}
+
+/* swap: поменять местами v[i] и v[j] */
+void swap2(int v[], int i, int j)
+{
+    int temp;
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
