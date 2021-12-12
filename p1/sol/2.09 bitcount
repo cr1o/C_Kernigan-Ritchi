@@ -1,0 +1,33 @@
+/*
+ * main.c
+ *
+ *  Created on: 3 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+//2.10. Операторы и выражения присваивания
+//Упражнение 2.9. Применительно к числам, в представлении которых использован дополнительный код,
+//выражение х &= (х-1) уничтожает самую правую 1 в х. Объясните, почему. Используйте это наблюдение
+//при написании более быстрого варианта функции bitcount.
+
+#include <stdio.h>
+#include <math.h>
+
+int bitcount (unsigned x);
+
+int main()
+{
+	char c;
+	int s = 0x1FF;
+	
+	printf("%d", bitcount(s));
+	c = getchar();
+    return 0;
+}
+
+int bitcount (unsigned x){
+	int b;
+	for (b = 0; x != 0; x &= (x-1) )
+		b++;
+
+	return b;
+}
