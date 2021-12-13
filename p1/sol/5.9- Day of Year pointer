@@ -1,0 +1,70 @@
+/*
+ * main.c
+ *
+ *  Created on: 13 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 5.7. Многомерные массивы */
+//Упражнение 5.9. Перепишите программы day_of_year и month_day, используя вместо индексов
+//указатели.
+
+#include <stdio.h>
+#include <string.h>
+
+int day_of_year(int year, int month, int day);
+//void month_day(int year, int yearday, int *pmonth, int *pday);
+
+int arr[]  = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int arr2[] = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+static int *daytab[] = {arr, arr2 };
+//Как можно записать по другому???
+
+
+int main (){
+    //int month, day;
+    //printf ("2021 march 3 = %d\n\n", day_of_year(2021, 3, 3));
+    //month_day(2020, 366, &month, &day);
+    //printf("Month is: %d.\t Day is %d\n\n", month, day);
+    printf("%d\n", *daytab[1] ); // = 0
+    printf("%d\n", *(daytab[1] +2 ) );
+    //printf("%d\n", *(daytab + 1)[3] );
+    //printf("%d\n", *(daytab)[1] );
+    getchar();
+    return 0;
+}
+
+/* day_of_year: определяет день года по месяцу и дню */
+/*
+int day_of_year(int year, int month, int day){
+    int i, leap;
+    if (month > 12)
+        return -1;
+
+    leap = year%4 == 0 && year%100 != 0 || year % 400 == 0;
+    if (daytab[leap][month] > day)
+        return -1;
+
+    for (i = 1; i < month; i++)
+        day += *(daytab + leap)[i];
+    return day;
+}
+*/
+/* month_day: определяет месяц и день по дню года */
+/*
+void month_day(int year, int yearday, int *pmonth, int *pday){
+    int i, leap;
+    leap = year%4 == 0 && year%100 != 0 || year%400 == 0;
+
+    if ( (yearday > 366) || (!leap && yearday > 365) ){
+        *pmonth = -1;
+        *pday = -1;
+        return;
+    }
+
+    for (i = 1; yearday > daytab[leap][i]; i++)
+        yearday -= daytab[leap][i];
+    *pmonth = i;
+    *pday = yearday;
+}*/
