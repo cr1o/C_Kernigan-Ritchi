@@ -8,13 +8,23 @@
 /* 5.7. Многомерные массивы */
 //Упражнение 5.9. Перепишите программы day_of_year и month_day, используя вместо индексов
 //указатели.
+/*
+ * main.c
+ *
+ *  Created on: 13 декабря 2021 г.
+ *      Author: Home
+ */
+
+/* 5.7. Многомерные массивы */
+//Упражнение 5.9. Перепишите программы day_of_year и month_day, используя вместо индексов
+//указатели.
 
 #include <stdio.h>
 #include <string.h>
 
 int day_of_year(int year, int month, int day);
 
-//void month_day(int year, int yearday, int *pmonth, int *pday);
+void month_day2(int year, int yearday, int *pmonth, int *pday);
 
 int arr[]  = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 int arr2[] = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -32,22 +42,17 @@ static char daytab2[2][13] = {
 
 
 int main (){
-    //int month, day;
-    //printf ("2021 march 3 = %d\n\n", day_of_year(2021, 3, 3));
-    //month_day(2020, 366, &month, &day);
-    //printf("Month is: %d.\t Day is %d\n\n", month, day);
-    printf("%d\n", *daytab[1] ); // = 0
-    printf("%d\n", *(daytab[1] +2 ) );
+    int month, day;
 
-    printf("%d\n", *(daytab[1] ) );
-    printf("%d\n", *(daytab[0] ) );
-    printf("%d\n", *(daytab[0] + 2 ) );
-    printf("%d\n", *(daytab[0] + 2 ) );
-    //printf("%d\n", *(daytab + 1)[3] );
-    //printf("%d\n", *(daytab)[1] );
-    //printf("%d\n", *(daytab[0] + 3 ) );
-    printf ("2021 march 3 = %d\n\n", day_of_year(2021, 8, 3));
-    //printf ("2021 march 3 = %d\n\n", day_of_year2(2021, 8, 3));
+    //month_day2(2021, 215, &month, &day);
+    //printf("Month is: %d.\t Day is %d\n\n", month, day);
+
+    printf ("2021.03.03 = %d\n\n", day_of_year(2021, 3, 3));
+
+    month_day2(2021, 62, &month, &day);
+    printf("Month is: %d.\t Day is %d\n\n", month, day);
+
+
     getchar();
     return 0;
 }
@@ -56,36 +61,39 @@ int main (){
 
 int day_of_year(int year, int month, int day){
     int i, leap;
-
+    int *p;
     if (month > 12)
         return -1;
 
     leap = (year%4 == 0 && year%100 != 0) || year % 400 == 0;
     if ( *(daytab[leap] + month) < day)
         return -1;
-
+    p = daytab[leap];
     ++daytab[leap];
     for (i = 1; i < month; daytab[leap]++, i++)
     	day += *daytab[leap];
-
+    daytab[leap] = p;
     return day;
 }
 
 
 /* month_day: определяет месяц и день по дню года */
-/*
-void month_day(int year, int yearday, int *pmonth, int *pday){
-    int i, leap;
-    leap = year%4 == 0 && year%100 != 0 || year%400 == 0;
 
+void month_day2(int year, int yearday, int *pmonth, int *pday){
+    int i, leap;
+
+    leap = (year%4 == 0 && year%100 != 0) || year%400 == 0;
+    int *p = daytab[leap];
     if ( (yearday > 366) || (!leap && yearday > 365) ){
         *pmonth = -1;
         *pday = -1;
         return;
     }
-
-    for (i = 1; yearday > daytab[leap][i]; i++)
-        yearday -= daytab[leap][i];
+    p = daytab[leap];
+    daytab[leap]++;
+    for (i = 1; yearday > *daytab[leap]; daytab[leap]++, i++)    	
+    	yearday -= *daytab[leap];
     *pmonth = i;
     *pday = yearday;
-}*/
+    daytab[leap] = p;
+}
