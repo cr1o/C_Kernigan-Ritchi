@@ -1,0 +1,57 @@
+/*
+ * main.c
+ *
+ *  Created on: 17 декабря. 2021 г.
+ *      Author: ashirobokov
+ */
+/* 4.3. Внешние переменные */
+
+//Упражнение 4.3. Исходя из предложенной нами схемы, дополните программу-калькулятор таким образом,
+//чтобы она "понимала" оператор получения остатка от деления (%) и отрицательные числа.
+
+
+#include <stdio.h>
+#include <string.h>
+
+int getch2(void);
+void ungetch(int);
+void ungets(char s[]);
+
+//getch и ungetch
+#define BUFSIZE 100
+char buf[BUFSIZE]; /* буфер для ungetch */
+int bufp = 0; /* след, свободная позиция в буфере */
+
+int main (){
+	char  c1;
+	char arr[] = "R2D2";
+	ungets(arr);
+
+	while (bufp > 0){
+		c1 = getch2();
+		printf("%c\n", c1);
+	}
+
+	getchar();
+	return 0;
+
+}
+
+void ungets(char s[]){
+	for (int i = 0; i < strlen(s); i++ ){
+		ungetch (s[i]);
+	}
+}
+
+int getch2(void) // взять (возможно возвращенный) символ
+{
+	return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) // вернуть символ на ввод
+{
+	if (bufp >= BUFSIZE)
+		printf ("ungetch: too many characters\n");
+	else
+		buf[bufp++] = c;
+}
