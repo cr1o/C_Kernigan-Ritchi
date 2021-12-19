@@ -1,0 +1,116 @@
+/*
+ * main.c
+ *
+ *  Created on: 19 декабря 2021 г.
+ *      Author: ashirobokov
+ */
+
+/* 5.6. Массивы указателей, указатели на указатели */
+//Упражнение 5.7. Напишите новую версию readlines, которая запоминала бы строки в массиве,
+//определенном в main, а не запрашивала память посредством программы alloc. Насколько быстрее эта
+//программа?
+
+#include <stdio.h>
+#include <string.h>
+
+//main
+#define MAXLINES 5000 /* максимальное число строк */
+char *lineptr[MAXLINES]; /* указатели на строки */
+
+int readlines(char *lineptr[], int maxlines, char *linestore);
+
+void writelines(char *lineptr[], int nlines);
+void qsort(char *lineptr[], int left, int right);
+
+int getline2 (char s[], int lim);
+
+
+//readlines
+#define MAXLEN 1000 /* максимальная длина строки */
+//int getline(char *, int);
+
+#define ALLOCSIZE 10000 /* размер доступного пространства */
+
+
+/* сортировка строк */
+int main(){
+    int nlines; /* количество прочитанных строк */
+    char allocbuf[ALLOCSIZE]; /* память для alloc */
+
+    if ((nlines = readlines(lineptr, MAXLINES, allocbuf)) >= 0) {
+    	qsort(lineptr, 0, nlines-1);
+        writelines(lineptr, nlines);
+        getchar();
+        return 0;
+    } else {
+        printf("ошибка: слишком много строк\n");
+        return 1;
+    }
+}
+
+/* readlines: чтение строк */
+int readlines(char *lineptr[], int maxlines, char *linestore){
+    int len, nlines;
+    char *p, line[MAXLEN];
+    nlines = 0;
+    printf("strlen(linestore) = %d", strlen(linestore));
+    p = linestore + strlen(linestore);
+    while ((len = getline2(line, MAXLEN)) > 0)
+        if (nlines >= maxlines || (len + strlen(linestore)) >= ALLOCSIZE)
+            return -1;
+        else {
+            line[len-1] = '\0'; /* убираем символ \n */
+            strcpy(p, line);
+            lineptr[nlines++] = p;
+            p += len;
+        }
+
+    return nlines;
+}
+
+/* writelines: печать строк */
+void writelines(char *lineptr[], int nlines){
+    int i;
+    for (i = 0; i < nlines; i++)
+    printf("%s\n", lineptr[i]);
+}
+
+/* qsort: сортирует v[left]...v[right] по возрастанию */
+void qsort(char *v[], int left, int right){
+    int i, last;
+    void swap(char *v[], int i, int j);
+    if (left >= right) /* ничего не делается, если в массиве */
+        return; /* менее двух элементов */
+    swap(v, left, (left+ right)/2);
+    last = left;
+    for (i = left+1; i <= right; i++)
+        if (strcmp(v[i], v[left]) < 0)
+            swap(v, ++last, i);
+    swap(v, left, last);
+    qsort(v, left, last-1);
+    qsort(v, last+1, right);
+}
+
+/* swap: поменять местами v[i] и v[j] */
+void swap(char *v[], int i, int j){
+    char *temp;
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
+
+/* getline: считывает строку в s, возвращает её длину */
+int getline2 (char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+
