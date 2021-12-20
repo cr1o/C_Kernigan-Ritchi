@@ -1,0 +1,119 @@
+/*
+ * main.c
+ *
+ *  Created on: 20 декабря 2021 г.
+ *      Author: ashirobokov
+ */
+/* 5.10. Аргументы командной строки */
+//Упражнение 5.11
+
+#include <stdio.h>
+#include <string.h>
+#define MAXLINE 1000    /* максимальная длина строки в потоке */
+
+#define SYM_NUM 3		//Количество символов которым заменяется пробел
+
+char line[MAXLINE];     /* текущая введенная строка */
+
+int getline_lim(void);
+
+void detab (int l, char *arg);
+void entab (int l, char *arg);
+
+/* вывод самой длинной строки в потоке
+ * специальная версия */
+int main(int argc, char *argv[])
+{
+    int len;
+    argv++;
+
+    while ((len = getline_lim()) > 0){
+    	//entab(len, *argv);
+    	detab(len, *argv);
+    }
+    getchar();
+    return 0;
+}
+
+/*Вместо табуляции, для наглядности,  заменяет 'a' на 'F' */
+void entab (int l, char *arg){
+	extern char line[];
+	int num, c1, c = arg[0];
+	if (c == '-'){
+		c1 = arg[1];
+		if ( (c1 >= '0') && (c1 <= '9') )
+			num = c1 - '0';
+		else
+			num = SYM_NUM;
+	} else
+		num = SYM_NUM;
+
+	int mustRem = 1;
+
+	for (int i = 0; i < l - 1; ++i)
+		if (line[i] != 'a' )
+			mustRem = 0;
+
+	int nt = (l) / num; //Количество табуляций
+
+	if (mustRem){
+		for (int i = 0; i < nt; ++i){
+			line[l - (num -1 )] = '\0';
+			line[i] = 'F';
+			l -= (num - 1);
+		}
+
+	}
+	printf("Result = %s\n", line);
+}
+
+/*Вместо табуляции, для наглядности,  заменяет 'a' на 'F' */
+void detab (int l, char *arg){
+	extern char line[];
+	int i = 0;
+	int num, c1, c = arg[0];
+
+	if (c == '-'){
+		c1 = arg[1];
+		if ( (c1 >= '0') && (c1 <= '9') )
+			num = c1 - '0';
+		else
+			num = SYM_NUM;
+	} else
+		num = SYM_NUM;
+
+	printf("Line before:\t%s\n", line);
+
+	while (line[i] != '\0') {
+		if (line[i] == 'a'){
+			for (int j = l; j > i; --j){
+				line[j + (num - 1)] = line[j];
+			}
+			l += num;
+			for (int j = i; j < (i + num); ++j){
+				line [j] = 'F';
+			}
+			i += (num - 1);
+		}
+		++i;
+	}
+	printf("Line after:\t%s\n", line);
+	printf("\n");
+}
+
+/* getline: считывает строку, возвращает её длину
+ * специальная версия */
+int getline_lim(void)
+{
+    int c, i;
+    extern char line[];
+
+    for (i = 0; i<MAXLINE-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        line[i] = c;
+    if (c == '\n') {
+        line[i] = c;
+        ++i;
+    }
+    line[--i] = '\0';
+    return i;
+}
