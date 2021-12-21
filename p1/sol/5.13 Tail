@@ -1,0 +1,113 @@
+/*
+ * main.c
+ *
+ *  Created on: 21 декабря 2021 г.
+ *      Author: ashirobokov
+ */
+/* 5.10. Аргументы командной строки */
+//Упражнение 5.11
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+//main
+#define MAXLINES 5000 /* максимальное число строк */
+#define TAILSIZE 3
+
+char *lineptr[MAXLINES]; /* указатели на строки */
+int readlines(char *lineptr[], int nlines);
+void writelines(char *lineptr[], int nlines, int tail);
+
+int getline2 (char s[], int lim);
+
+//readlines
+#define MAXLEN 1000 /* максимальная длина строки */
+
+//alloc
+char *alloc(int n);
+#define ALLOCSIZE 10000 /* размер доступного пространства */
+static char allocbuf[ALLOCSIZE]; /* память для alloc */
+static char *allocp = allocbuf; /* указатель на своб. место */
+
+int main(int argc, char *argv[])
+{
+    int t, lTail;
+
+	int nlines; /* количество прочитанных строк */
+    if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+
+    	argv++;
+    	printf("argv = %s\n", *argv );
+    	printf("argv int = %d\n", atoi(*argv));
+
+    	if ((*argv)[0] == '-'){
+    		if ( (t = atoi(*argv)) < 0)
+    			lTail = -t;
+    		else {
+    			lTail = TAILSIZE;
+    			printf("Incorrect argument\n");
+    		}
+    	} else {
+    		printf("Incorrect argument too\n");
+    		lTail = TAILSIZE;
+    	}
+        writelines(lineptr, nlines, lTail);
+        //return 0;
+    } else {
+        printf("ошибка: слишком много строк\n");
+        return 1;
+    }
+
+    getchar();
+    return 0;
+}
+
+/* readlines: чтение строк */
+int readlines(char *lineptr[], int maxlines)
+{
+    int len, nlines;
+    char *p, line[MAXLEN];
+    nlines = 0;
+    while ((len = getline2(line, MAXLEN)) > 0)
+        if (nlines >= maxlines || (p = alloc(len)) == NULL)
+            return -1;
+        else {
+            line[len-1] = '\0'; /* убираем символ \n */
+            strcpy(p, line);
+            lineptr[nlines++] = p;
+        }
+    return nlines;
+}
+
+/* writelines: печать строк */
+void writelines(char *lineptr[], int nlines, int tail){
+    int i;
+    printf("Tail length = %d\n", tail);
+    for (i = (nlines - tail); i < nlines; i++)
+    	printf("%s\n", lineptr[i]);
+}
+
+/* getline: считывает строку в s, возвращает её длину */
+int getline2 (char s[], int lim)
+{
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+
+char *alloc(int n) /* возвращает указатель на п символов */
+{
+	if (allocbuf + ALLOCSIZE - allocp >= n) {
+		allocp += n; /* пространство есть */
+		return allocp - n; /* старое р */
+	} else /* пространства нет */
+		return 0;
+}
