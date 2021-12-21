@@ -5,7 +5,7 @@
  *      Author: ashirobokov
  */
 /* 5.10. Аргументы командной строки */
-//Упражнение 5.11
+//Упражнение 5.13
 
 #include <stdio.h>
 #include <string.h>
