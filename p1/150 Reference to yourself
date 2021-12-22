@@ -1,4 +1,3 @@
-
 struct tnode { /* узел дерева */
 	char *word; /* указатель на текст */
 	int count; /* число вхождений */
@@ -26,14 +25,16 @@ char buf[BUFSIZE]; /* буфер для ungetch */
 int bufp = 0; /* след, свободная позиция в буфере */
 
 /* подсчет частоты встречаемости слов */
-int main() {
+int main(int argc, char* argv[]) {
 	struct tnode *root;
 	char word[MAXWORD];
 	root = NULL;
 	while (getword (word, MAXWORD) != EOF)
-	if (isalpha(word[0]))
-	root = addtree(root, word);
+		if (isalpha(word[0]))
+			root = addtree(root, word);
+	
 	treeprint(root);
+	getchar();
 	return 0;
 }
 
@@ -41,25 +42,25 @@ int main() {
 struct tnode *addtree(struct tnode *p, char *w){
 	int cond;
 	if (p == NULL) { /* слово встречается впервые */
-	p = talloc(); /* создается новый узел */
-	p->word = strdup2(w);
-	p->count = 1;
-	p->left = p->right = NULL;
+		p = talloc(); /* создается новый узел */
+		p->word = strdup2(w);
+		p->count = 1;
+		p->left = p->right = NULL;
 	} else if ((cond = strcmp(w, p->word)) == 0)
-	p->count++; /* это слово уже встречалось */
+		p->count++; /* это слово уже встречалось */
 	else if (cond < 0) /* меньше корня левого поддерева */
-	p->left = addtree(p->left, w);
+		p->left = addtree(p->left, w);
 	else /* больше корня правого поддерева */
-	p->right = addtree(p->right, w);
+		p->right = addtree(p->right, w);
 	return p;
 }
 
 /* treeprint: упорядоченная печать дерева р */
 void treeprint(struct tnode *p) {
 	if (p != NULL)  {
-	treeprint(p->left);
-	printf("%4d %s\n", p->count, p->word);
-	treeprint(p->right);
+		treeprint(p->left);
+		printf("%4d %s\n", p->count, p->word);
+		treeprint(p->right);
 	}
 }
 
@@ -73,7 +74,7 @@ char *strdup2(char *s){
 	char *p;
 	p = (char *) malloc(strlen(s)+1); /* +1 для '\0' */
 	if (p != NULL)
-	strcpy(p, s);
+		strcpy(p, s);
 	return p;
 }
 
@@ -107,7 +108,7 @@ int getch(void) // взять (возможно возвращенный) сим
 void ungetch(int c) // вернуть символ на ввод
 {
 	if (bufp >= BUFSIZE)
-	printf ("ungetch: too many characters\n");
+		printf ("ungetch: too many characters\n");
 	else
-	buf[bufp++] = c;
+		buf[bufp++] = c;
 }
