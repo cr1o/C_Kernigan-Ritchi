@@ -1,0 +1,19 @@
+//23.12.2021
+//7.1. Стандартный ввод-вывод
+//Упражнение 7.1. Напишите программу, осуществляющую перевод ввода с верхнего регистра на нижний или с
+//нижнего на верхний в зависимости от имени, по которому она вызывается и текст которого находится в
+//argv[0].
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main (int argc, char *argv[]){ 
+    int c;
+
+    while (  (c = getchar() ) != EOF)        
+        ( isupper((*argv)[0] ) ) ? putchar( toupper(c)) : putchar( towlower(c)); 
+
+    getchar();
+    return 0;
+}
