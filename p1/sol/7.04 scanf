@@ -1,0 +1,58 @@
+//25.12.2021
+//7.4. Форматный ввод (scanf)
+//Упражнение 7.4. Напишите свою версию scanf по аналогии с minprintf из предыдущего параграфа.
+
+
+#include <stdio.h>
+#include <stdarg.h>
+
+void minscanf(char *fmt, ...);
+
+int main(){
+    int a, b;
+    float c;
+
+    char s[] = "Hello";
+    
+    int day;
+  
+    minscanf("%s %d", s, &day);
+    printf("%s\t Day = %d\n",s, day);
+
+    return 0;
+}
+
+void minscanf(char *fmt, ...){
+    va_list ap;         // указывает на очередной безымянный аргумент 
+    char *p, *sval;
+    int ival;
+    double dval;
+    va_start(ap, fmt); // устанавливает ар на 1-й безымянный аргумент 
+
+    for (p = fmt; *p; p++) {
+        if (*p != '%') {
+            ;//getchar(*p);
+            continue;
+        }
+        switch (*++p) {
+        case 'd':
+            ival = va_arg(ap, int);
+            scanf ("%d", ival);
+            break;
+        case 'f':
+            dval = va_arg(ap, double);
+            scanf ("%f", dval);
+            break;
+        case 's':
+            for (sval = va_arg(ap, char *); *sval ; sval++)
+                *sval = getchar();
+            *(++sval) = '\0';    
+            break;          
+        default:
+            ;//getchar(*p);
+            break;
+        }
+
+    }
+    va_end(ap); /* очистка, когда все сделано */
+}
