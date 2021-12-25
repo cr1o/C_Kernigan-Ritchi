@@ -1,0 +1,123 @@
+/*
+ * main.c
+ *
+ *  Created on: 25 декабря 2021 г.
+ *      Author: ashirobokov
+ */
+
+//7.4. Форматный ввод (scanf)
+//Упражнение 7.5. Перепишите основанную на постфиксной записи программу калькулятора из главы 4 таким
+//образом, чтобы для ввода и преобразования чисел она использовала scanf и/или sscanf.
+
+
+//main
+#include <stdio.h>
+#include <stdlib.h> 	// для atof()
+#include <string.h>
+
+#define MAXOP 100 		// макс. размер операнда или оператора
+#define NUMBER '0' 		// признак числа
+int getop (char []);
+void push (double);
+double pop (void);
+
+//pop - push
+#define MAXVAL 100 		// максимальная глубина стека
+int sp = 0; 			// следующая свободная позиция в стеке */
+double val[ MAXVAL ]; 	// стек
+
+//getop
+#include <ctype.h>
+
+int getch(void);
+void ungetch(int);
+
+//getch и ungetch
+#define BUFSIZE 100
+char buf[BUFSIZE]; /* буфер для ungetch */
+int bufp = 0; /* след, свободная позиция в буфере */
+
+
+// калькулятор с обратной польской записью
+int main (){
+	int type;
+	double op2;
+	char s[MAXOP];
+    int t;
+
+    while ( (t = scanf("%s", s)) && t != EOF ) {
+        type = getop(s); 
+        switch (type) {
+        case NUMBER:
+          push (atof (s));
+          break;
+        case '+':
+          push (pop() + pop());
+          break;
+        case '*':
+          push (pop() * pop());
+          break;
+        case '-':
+          op2 = pop();
+          push (pop() - op2);
+          break;
+        case '/' :
+          op2 = pop();
+          if (op2 != 0.0)
+            push (pop() / op2);
+          else
+            printf("ошибка: деление на нуль\n");
+          break;
+        case '=' :
+          printf("\t%.8g\n", pop());
+          break;
+        default:
+          printf("ошибка: неизвестная операция %s\n", s);
+        break;
+        }
+    }
+
+	return 0;
+}
+
+/* getop: получает следующий оператор или операнд */
+int getop(char s[])
+{    
+    if (!isdigit(s[0]) && s[0] != '.')
+        return s[0]; /* не число */
+    
+	return NUMBER;
+}
+///*
+int getch(void) // взять (возможно возвращенный) символ
+{
+	return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) // вернуть символ на ввод
+{
+	if (bufp >= BUFSIZE)
+	printf ("ungetch: слишком много символов\n");
+	else
+	buf[bufp++] = c;
+}
+//*/
+
+/* push: положить значение f в стек */
+void push(double f)
+{
+	if (sp < MAXVAL)
+		val[sp++] = f;
+	else
+		printf( "ошибка: стек полон, %g не помещается\n", f);
+}
+/* pop: взять с вершины стека и выдать в качестве результата */
+double pop(void)
+{
+	if (sp > 0)
+		return val[--sp];
+	else {
+		printf( "ошибка: стек пуст\n");
+		return 0.0;
+	}
+}
