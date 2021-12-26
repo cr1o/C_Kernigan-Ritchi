@@ -1,0 +1,101 @@
+//26.12.2021
+//7.7. Ввод-вывод строк
+//Упражнение 7.7. Модифицируйте программу поиска по образцу из главы 5 таким образом, чтобы она брала
+//текст из множества именованных файлов, а если имен файлов в аргументах нет, то из стандартного ввода.
+//Будет ли печататься имя файла, в котором найдена подходящая строка?
+
+/*
+Исходная задача на стр. 128
+По общему соглашению для Си-программ в системе UNIX знак минус перед аргументом вводит
+необязательный признак или параметр. Так, если -x служит признаком слова "кроме", которое изменяет
+задание на противоположное, а -n указывает на потребность в нумерации строк, то команда
+find -x -n образец
+напечатает все строки, в которых не найден указанный образец, и, кроме того, перед каждой строкой укажет
+ее номер.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAXLINE 1000
+int getline2(char *line, int max);
+
+/* find: печать строк образцами из 1-го аргумента */
+int main(int argc, char *argv[]){
+    char line[MAXLINE];
+    char sample[MAXLINE];
+    char filename[MAXLINE];
+    FILE *fp;
+    char *prog = argv[0];   // имя программы 
+
+    long lineno = 0;
+    int c, except = 0, number = 0, found = 0;
+    while (--argc > 0 && (*++argv)[0] == '-')
+        while (c = *++argv[0])
+            switch (c) {
+            case 'x':
+                except = 1;
+                break;
+            case 'n' :
+                number = 1;
+                break;
+            default:
+                printf( "find: unknown %c\n", c);
+                argc = 0;
+                found = -1;
+                break;
+            }
+    strcpy(sample, *argv);
+    printf("Sample = %s\n", sample);
+    if ( --argc ){
+        if ((fp = fopen(*++argv, "r")) == NULL) {
+            fprintf (stderr, "%s: can't open file %s\n", prog, *argv);
+            getchar();
+            exit(1);
+        } else{
+            //strcpy(filename, *argv);
+            //printf("%s\n", filename);
+            printf("ok, let's begin\n");
+            while (fgets(line, MAXLINE, fp) != NULL ) {
+                lineno++;
+                if ((strstr(line, sample) != NULL) != except) {
+                    if (number)
+                        printf("%ld:", lineno);
+                    printf("%s", line);
+                    found++;
+                }   
+            }
+        }
+    } else {
+        printf("No argument for input\n");
+
+        while (getline2(line, MAXLINE) > 0) {
+            lineno++;
+            if ((strstr(line, sample) != NULL) != except) {
+                if (number)
+                    printf("%ld:", lineno);
+                printf("%s", line);
+                found++;
+            }
+        }
+    }
+
+    printf("\nThe number of rows in which the fragment was found = %d", found);    
+    getchar();    
+    return found;
+}
+
+/* getline: считывает строку в s, возвращает её длину */
+int getline2 (char s[], int lim){
+    int c, i;
+
+    for (i = 0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
+        s[i] = c;
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
